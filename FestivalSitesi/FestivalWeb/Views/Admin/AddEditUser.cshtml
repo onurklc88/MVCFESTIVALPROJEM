@@ -1,0 +1,125 @@
+﻿@model FestivalWeb.Models.Users
+@{
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<div class="row">
+    <ol class="breadcrumb">
+        <li><a href="#"><svg class="glyph stroked home"><use xlink:href="#stroked-home"></use></svg></a></li>
+        <li class="active">Icons</li>
+    </ol>
+</div><!--/.row-->
+
+<div class="row">
+    <div class="col-lg-12">
+        <h1 class="page-header">Kullanıcı</h1>
+    </div>
+</div><!--/.row-->
+
+
+<div class="row">
+    <div class="col-lg-12">
+        @using (Html.BeginForm("AddEditUser", "Admin", FormMethod.Post, new { enctype = "multipart/form-data" }))
+        {
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    Form
+                    <button type="submit" class="btn btn-primary pull-right">Kaydet</button>
+                </div>
+                <div class="panel-body">
+                    <div class="col-md-12">
+                        <input type="hidden" name="ID" value="@Model.ID" />
+                        <div class="row">
+                            <div class="form-group col-md-4">
+                                <label>Adı</label>
+                                <input class="form-control" placeholder="Adı" name="Name" value="@Model.Name">
+                            </div>
+
+                            <div class="form-group col-md-4">
+                                <label>Soyadı</label>
+                                <input class="form-control" placeholder="Soyadı" name="Surname" value="@Model.Surname">
+                            </div>
+
+                            <div class="form-group col-md-4">
+                                <label>E-Posta</label>
+                                <input class="form-control" placeholder="E-Posta" name="Email" value="@Model.Email">
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="form-group col-md-6">
+                                <label>Password</label>
+                                <div class='input-group'>
+                                    <input type="password" class="form-control pass" name="Password" value="@Model.Password">
+                                    <span style="cursor:pointer" class="input-group-addon">
+                                        <span class="glyphicon glyphicon-eye-open gosterGizle"></span>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label>Doğum Tarihi</label>
+                                <div class='input-group date' id='datetimepicker'>
+                                    <input type='text' class="form-control" name="BirthDay" value="@Model.BirthDay" />
+                                    <span class="input-group-addon">
+                                        <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        @if (Model.Avatar == null)
+                        {
+                            <div class="form-group">
+                                <label>Avatar Yükle</label>
+                                <input type="file" name="Resim">
+                                <p class="help-block"></p>
+                            </div>
+                        }
+
+                        <div class="checkbox">
+                            <label>
+                                <input id='chkActive' type='checkbox' checked="@Model.IsActive" value='true' name='IsActive'>Aktif Mi?
+                                <input id='chkActiveHidden' type='hidden' value='false' name='IsActive'>
+                            </label>
+                        </div>
+                        <div class="checkbox">
+                            <label>
+                                <input id='chkAdmin' type='checkbox' checked="@Model.IsAdmin" value='true' name='IsAdmin'>Admin Mi?
+                                <input id='chkAdminHidden' type='hidden' value='false' name='IsAdmin'>
+                            </label>
+                        </div>
+
+
+                    </div>
+
+                </div>
+            </div>
+        }
+    </div><!-- /.col-->
+</div><!-- /.row -->
+
+@section Script{
+    <script type="text/javascript">
+        $(function () {
+            $('#datetimepicker').datetimepicker({
+                minDate: moment("1930-01-01 00:00:00.000"),
+                defaultDate: moment("1930-01-01 00:00:00.000"),
+                locale: 'tr',
+                format: 'D/MM/YYYY'
+            });
+        });
+
+        $('.gosterGizle').click(function () {
+
+            var pass = $('.pass');
+
+            if (pass.attr('type') == 'password') {
+                pass.attr('type', 'text');
+            } else {
+                pass.attr('type', 'password');
+            }
+
+        });
+    </script>
+
+}

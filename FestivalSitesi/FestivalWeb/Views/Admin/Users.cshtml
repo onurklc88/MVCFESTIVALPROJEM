@@ -1,0 +1,184 @@
+﻿@model List<FestivalWeb.Models.Users>
+@{
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<div class="row">
+    <ol class="breadcrumb">
+        <li><a href="#"><svg class="glyph stroked home"><use xlink:href="#stroked-home"></use></svg></a></li>
+        <li class="active">Icons</li>
+    </ol>
+</div><!--/.row-->
+
+<div class="row">
+    <div class="col-lg-12">
+        <h1 class="page-header">Kullanıcılar</h1>
+    </div>
+</div><!--/.row-->
+
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="row">
+            <div class="pull-right" style="margin-bottom:10px;margin-right:20px;">
+                <a href="@Url.Action("AddEditUser","Admin")" class="btn btn-success">+ Yeni Kayıt</a>
+            </div>
+        </div>
+        <table id="userlist" class="display" cellspacing="0" width="100%">
+            <thead>
+                <tr>
+                    <th>No</th>
+                    <th>Adı</th>
+                    <th>Soyadı</th>
+                    <th>E-Posta</th>
+                    <th>Aktif Mi</th>
+                    <th>Kayıt Tarihi</th>
+                    <th>İşlemler</th>
+                </tr>
+            </thead>
+            <tfoot>
+                <tr>
+                    <th>No</th>
+                    <th>Adı</th>
+                    <th>Soyadı</th>
+                    <th>E-Posta</th>
+                    <th>Aktif Mi</th>
+                    <th>Kayıt Tarihi</th>
+                    <th>İşlemler</th>
+                </tr>
+            </tfoot>
+            <tbody>
+                @foreach (var user in Model)
+                {
+                    <tr>
+                        <td></td>
+                        <td>@user.Name</td>
+                        <td>@user.Surname</td>
+                        <td>@user.Email</td>
+                        <td>@user.IsActive</td>
+                        <td>@user.InsertDate.ToString("dd.MM.yyyy")</td>
+                        <th><button data-id="@user.ID" class="btn btn-primary edit">Düzenle</button>&nbsp;&nbsp;<button data-id="@user.ID" class="btn btn-danger delete">Sil</button></th>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+@section Script{
+    <script>
+        var hasOwnProperty = Object.prototype.hasOwnProperty;
+
+        function isEmpty(obj) {
+
+            // null and undefined are "empty"
+            if (obj == null) return true;
+
+            // Assume if it has a length property with a non-zero value
+            // that that property is correct.
+            if (obj.length > 0)    return false;
+            if (obj.length === 0)  return true;
+
+            // If it isn't an object at this point
+            // it is empty, but it can't be anything *but* empty
+            // Is it empty?  Depends on your application.
+            if (typeof obj !== "object") return true;
+
+            // Otherwise, does it have any properties of its own?
+            // Note that this doesn't handle
+            // toString and valueOf enumeration bugs in IE < 9
+            for (var key in obj) {
+                if (hasOwnProperty.call(obj, key)) return false;
+            }
+
+            return true;
+        }
+
+        var res = @Html.Raw(ViewBag.Res);
+        $(document).ready(function () {
+            window.history.pushState(null,null,'/Admin/Users');
+            var t = $('#userlist').DataTable({
+                "language":
+                   {
+                       "sDecimal": ",",
+                       "sEmptyTable": "Tabloda herhangi bir veri mevcut değil",
+                       "sInfo": "_TOTAL_ kayıttan _START_ - _END_ arasındaki kayıtlar gösteriliyor",
+                       "sInfoEmpty": "Kayıt yok",
+                       "sInfoFiltered": "(_MAX_ kayıt içerisinden bulunan)",
+                       "sInfoPostFix": "",
+                       "sInfoThousands": ".",
+                       "sLengthMenu": "Sayfada _MENU_ kayıt göster",
+                       "sLoadingRecords": "Yükleniyor...",
+                       "sProcessing": "İşleniyor...",
+                       "sSearch": "Ara:",
+                       "sZeroRecords": "Eşleşen kayıt bulunamadı",
+                       "oPaginate": {
+                           "sFirst": "İlk",
+                           "sLast": "Son",
+                           "sNext": "Sonraki",
+                           "sPrevious": "Önceki"
+                       },
+                       "oAria": {
+                           "sSortAscending": ": artan sütun sıralamasını aktifleştir",
+                           "sSortDescending": ": azalan sütun soralamasını aktifleştir"
+                       }
+                   }
+                ,
+                "columnDefs": [{
+                    "searchable": false,
+                    "orderable": false,
+                    "targets": 0
+                }],
+                "order": [[1, 'asc']]
+
+            });
+
+            t.on('order.dt search.dt', function () {
+                t.column(0, { search: 'applied', order: 'applied' }).nodes().each(function (cell, i) {
+                    cell.innerHTML = i + 1;
+                });
+            }).draw();
+
+            if (!isEmpty(res))
+            {
+                if (res.success) {
+                    toastr.success(res.messages, "Başarılı", { positionClass: "toast-bottom-right",timeOut: "2500"});
+                } else {
+                    toastr.error(res.messages, "Hata!",{ positionClass: "toast-bottom-right",timeOut: "2500"});
+                }
+            }
+
+
+
+        });
+
+        $('.edit').click(function () {
+            var id = $(this).data('id');
+            window.location.href = "/Admin/AddEditUser?ID=" + id;
+        });
+
+        $('.delete').click(function () {
+            var id = $(this).data('id');
+            swal({
+                title: 'Emin misiniz?',
+                text: "Kullanıcıyı silmek üzeresiniz!",
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Evet, sil!'
+            }).then(function () {
+                $.post('/Admin/DeleteUser', { ID: id }, function () {
+                    swal(
+                          'Silindi!',
+                          'Kullanıcı başarı ile silindi.',
+                          'success'
+                        ).then(function () {
+                            location.reload();
+                        })
+                });
+
+            })
+
+        });
+    </script>
+}

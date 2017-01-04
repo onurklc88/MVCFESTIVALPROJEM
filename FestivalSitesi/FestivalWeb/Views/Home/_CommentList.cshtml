@@ -1,0 +1,117 @@
+﻿@model List<FestivalWeb.Models.UserComments>
+<style>
+    *{
+  box-sizing: border-box;
+}
+body{
+  margin: 0;
+  font:   16px/1.3 'Roboto', sans-serif;
+  color:  #333;
+}
+h1, h2{
+  font-weight:200;
+}
+
+/* Material Design Lists - by Roko CB
+ - https://www.google.com/design/spec/components/lists.html
+ - http://stackoverflow.com/a/33312676/383904
+*/
+
+/*
+Material Design - Icons
+*/
+
+[class^=mad-icon-]{
+  display: inline-block;
+  vertical-align: top;
+  border-radius: 50%;
+  background: #999 50% / cover;
+  color: #fff;
+}
+.mad-icon-24{
+  width:  24px;
+  height: 24px;
+}
+.mad-icon-32{
+  width:  32px;
+  height: 32px;
+}
+.mad-icon-40{
+  width:  40px;
+  height: 40px;
+}
+
+/*
+Material Design - Lists
+*/
+
+ul.mad-list{
+  display: table;
+  width: 100%;
+  padding: 8px 0; /* 8 padding T/B */
+  margin: 0;
+  list-style: none;
+}
+ul.mad-list li{
+  display: table-row;
+  height: 48px; /* that's actually min-height for rows */
+}
+ul.mad-list li > *{
+  /* Align always to middle */
+  display: table-cell;
+  margin: 0;
+  padding: 0;
+  vertical-align: middle;
+}
+ul.mad-list li > *:first-child{
+  /* Whoever is the first child it needs 16px left space */
+  padding-left: 16px;
+  background: rgba(0,255,0,0.05);
+}
+ul.mad-list li > *:last-child{
+  /* Whoever is the last child it needs 16 right space */
+  padding-right: 16px;
+}
+ul.mad-list .mad-list-icon{
+  /* Always left-align! Don't center icons */
+  width: 72px; /* 72-16 but we already use box-sizing */
+}
+ul.mad-list .mad-list-text{
+  background: rgba(0,0,255,0.05);
+}
+ul.mad-list .mad-list-icon-secundary{
+  /* Secundary actions will have already 16 right padding 
+  since it's :last-child but it needs also a left 16*/
+  padding-left: 16px;
+  width: 1px; /* Always h-center align content */
+  text-align: center; /* Just to make sure if we use combinations of larger icons */
+  background: rgba(255,0,255,0.05)
+}
+
+/*
+Special classes
+*/
+.border-bottom{
+  border-bottom:1px solid rgba(0,0,0,0.1);
+}
+</style>
+
+<ul class="mad-list">
+    @foreach (var comment in Model)
+    {
+        <li>
+            <div class="mad-list-icon">
+                <span class="mad-icon-40" style="background-image:url(@comment.User.Avatar)"></span>
+            </div>
+            <div class="mad-list-text">
+                <h4>@comment.User.Name</h4>
+                <p>@comment.Comment</p>
+                <span>@comment.InsertDate.ToString("dd MM yyyy")</span>
+            </div>
+            <div class="mad-list-icon-secundary">
+                <span class="mad-icon-40 color-red">@comment.LikeCount</span>
+            </div>
+        </li>
+    }    
+</ul>
+

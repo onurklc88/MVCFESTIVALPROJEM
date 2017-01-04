@@ -1,0 +1,49 @@
+﻿@model List<FestivalWeb.Models.Fests>
+@{
+    int sayac = 0;
+    double s = (double)Model.Count / 3;
+    double x = Math.Ceiling(s);
+    int katma = Model.Count <= 3 ? Model.Count : 3;
+}
+<div class="container">
+    <div class="row">
+        <div class="col-sm-12 col-md-9">
+            <div id="event-carousel" class="carousel slide" data-interval="false">
+                <h2 class="heading">Festivaller</h2>
+                <a class="even-control-left" href="#event-carousel" data-slide="prev"><i class="fa fa-angle-left"></i></a>
+                <a class="even-control-right" href="#event-carousel" data-slide="next"><i class="fa fa-angle-right"></i></a>
+                <div class="carousel-inner">
+                    @for (int i = 0; i < x; i++)
+                    {
+                        <div class="item @(i == 0 ? "active" : "")">
+                            <div class="row">
+                                @for (int j = sayac; j < sayac + katma; j++)
+                                {
+                                    <div style="cursor:pointer;" class="col-sm-4 modalAc" data-href="@Url.Action("_Modal","Home",new { ID = Model[j].ID })">
+                                        <div class="single-event">
+                                            <img class="img-responsive" src="@Model[j].FestPicture" alt="event-image">
+                                            <h4>@Model[j].Title</h4>
+                                            <h5>@(Model[j].Price.HasValue ? "₺" + Model[j].Price : "Bedava")</h5>
+                                        </div>
+                                    </div>
+                                    if (j == Model.Count - 1)
+                                    {
+                                        break;
+                                    }
+                                }
+
+                                @(sayac += 3)
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="guitar">
+            <img class="img-responsive" src="~/Assets/Site/images/guitar.png" alt="guitar">
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="myModal" role="dialog">
+    @Html.Action("_Modal", "Home");
+</div>

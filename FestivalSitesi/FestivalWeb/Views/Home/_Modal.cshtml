@@ -1,0 +1,48 @@
+﻿@using FestivalWeb.Models
+@model FestivalWeb.Models.Fests
+
+@{ 
+    Users current = Session["Current_User"] as Users;
+}
+
+    <div style="color:black;width:850px;" class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">@Model.Title</h4>
+            </div>
+            <div class="modal-body">
+                <img class="img-responsive" src="@Model.FestPicture" alt="event-image">
+                <p>@Model.Descrition</p>
+                <h4>@(Model.Price.HasValue ? "₺" + Model.Price : "Bedava")</h4>
+                <br/>
+                @Html.Action("_CommentList","Home",new { FestID = Model.ID})
+                
+                <center>
+                    @if (current != null)
+                    {
+                        <form action="@Url.Action("PostComment","Home",new { FestID = Model.ID })" class="formYorum" method="post">
+                            <div class="row">
+                                <input class="form-control col-md-12" type="text" name="comment" value="" />
+                                <button type="submit" class="btn btn-primary pull-right">Yorum Yaz</button>
+                            </div>
+                        </form>
+                    }
+                    else
+                    {
+                        <span class="alert-danger">Giriş Yapmadan Yorum Atamazsınız.</span>
+                    }
+                </center>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">KAPAT</button>
+            </div>
+        </div>
+
+    </div>
+
+@section Script{
+   
+    }

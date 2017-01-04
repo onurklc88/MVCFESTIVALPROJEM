@@ -1,0 +1,111 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Forms</title>
+
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.10.13/datatables.min.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" />
+    <link href="~/Assets/Admin/css/bootstrap-datetimepicker.min.css" rel="stylesheet" />
+    <link href="~/Assets/Admin/css/bootstrap-table.css" rel="stylesheet" />
+    <link href="~/Assets/Admin/css/bootstrap-theme.min.css" rel="stylesheet" />
+    <link href="~/Assets/Admin/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Assets/Admin/css/datepicker.css" rel="stylesheet" />
+    <link href="~/Assets/Admin/css/datepicker3.css" rel="stylesheet" />
+    <link href="~/Assets/Admin/css/styles.css" rel="stylesheet" />
+    <link href="~/Assets/Admin/css/sweetalert2.min.css" rel="stylesheet" />
+
+    <script src="~/Assets/Admin/js/lumino.glyphs.js"></script>
+
+    <!--[if lt IE 9]>
+    <script src="js/html5shiv.js"></script>
+    <script src="js/respond.min.js"></script>
+    <![endif]-->
+</head>
+
+
+<body>
+
+    <div class="row">
+        <div class="col-xs-10 col-xs-offset-1 col-sm-8 col-sm-offset-2 col-md-4 col-md-offset-4">
+            <div class="login-panel panel panel-default">
+                <div class="panel-heading">Log in</div>
+                <div class="panel-body">
+                    @using (Html.BeginForm("LogIn", "Admin", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                    {
+                        <fieldset>
+                            <div class="form-group">
+                                <input class="form-control" placeholder="E-mail" name="email" type="email" autofocus="">
+                            </div>
+                            <div class="form-group">
+                                <input class="form-control" placeholder="Password" name="password" type="password" value="">
+                            </div>
+                            <input type="submit" class="btn btn-primary" value="Giriş" />
+                        </fieldset>
+                    }
+                </div>
+            </div>
+        </div><!-- /.col-->
+    </div><!-- /.row -->
+   
+    <script src="~/Assets/Admin/js/jquery-1.10.2.min.js"></script>
+    <script src="~/Assets/Admin/js/moment.min.js"></script>
+    <script src="~/Assets/Admin/js/locales.js"></script>
+    <script src="~/Assets/Admin/js/collapse.js"></script>
+    <script src="~/Assets/Admin/js/transition.js"></script>
+    <script src="~/Assets/Admin/js/bootstrap-datetimepicker.min.js"></script>
+    <script src="~/Assets/Admin/js/bootstrap-table.js"></script>
+    <script src="~/Assets/Admin/js/bootstrap.min.js"></script>
+    <script src="~/Assets/Admin/js/chart.min.js"></script>
+    <script src="~/Assets/Admin/js/html5shiv.min.js"></script>
+    <script src="~/Assets/Admin/js/dropzone.js"></script>
+    <script src="~/Assets/Admin/js/lumino.glyphs.js"></script>
+    <script src="~/Assets/Admin/js/moment-with-locales.min.js"></script>
+
+    <script src="~/Assets/Admin/js/respond.min.js"></script>
+    <script src="~/Assets/Admin/js/sweetalert2.min.js"></script>
+
+    <script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.13/datatables.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
+    <script>
+        $('form').submit(function (e) {
+
+            toastr.options = {
+                "closeButton": true,
+                "debug": false,
+                "newestOnTop": false,
+                "progressBar": false,
+                "positionClass": "toast-bottom-right",
+                "preventDuplicates": false,
+                "onclick": null,
+                "showDuration": "300",
+                "hideDuration": "1000",
+                "timeOut": "2500",
+                "extendedTimeOut": "1000",
+                "showEasing": "swing",
+                "hideEasing": "linear",
+                "showMethod": "fadeIn",
+                "hideMethod": "fadeOut"
+            }
+
+            e.preventDefault();
+            var url = $(this).attr('action');
+            var data = $(this).serialize();
+
+            $.post(url, data, function (res) {
+                if (res.result) {
+                    toastr.success(res.message, "Giriş Başarılı", { progressBar: true });
+                    setTimeout(function () { window.location.href = "/Admin" }, 2500);
+                } else {
+                    toastr.error(res.message, "Giriş Başarısız");                  
+                }
+
+            });
+        });
+    </script>
+
+</body>
+
+</html>

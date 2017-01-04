@@ -1,0 +1,48 @@
+﻿@using System.Threading
+@using System.Globalization
+@model FestivalWeb.Models.Fests
+
+@{ 
+    Thread.CurrentThread.CurrentCulture = new CultureInfo("en-US");
+}
+<div class="container">
+    <div class="row">
+        <div class="watch">
+            <img class="img-responsive" src="~/Assets/Site/images/watch.png" alt="">
+        </div>
+        <div class="col-md-4 col-md-offset-2 col-sm-5">
+            <h2>En yakın festival</h2>            
+        </div>
+        <div class="col-sm-7 col-md-6">
+            <ul id="countdown" data-festdate="@Model.StartDate.ToString("dd MMMM yyyy hh:mm:ss")">
+                <li>
+                    <span class="days time-font">00</span>
+                    <p>gün </p>
+                </li>
+                <li>
+                    <span class="hours time-font">00</span>
+                    <p class="">saat </p>
+                </li>
+                <li>
+                    <span class="minutes time-font">00</span>
+                    <p class="">dakika</p>
+                </li>
+                <li>
+                    <span class="seconds time-font">00</span>
+                    <p class="">saniye</p>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="cart">
+        <a href="#"><i class="fa fa-shopping-cart"></i>
+            <span>@(Model.Price.HasValue ? "₺" + Model.Price.Value.ToString() : "Bedava")</span>
+        </a>
+    </div>
+</div>
+
+@section Script {
+    <script>
+       
+    </script>
+    }
